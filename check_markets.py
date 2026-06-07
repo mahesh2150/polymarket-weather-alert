@@ -40,9 +40,12 @@ new_events = []
 for event in events:
 
     title = event["title"].lower()
+    slug = event["slug"].lower()
 
-    # Only temperature markets
-    if "highest temperature" not in title:
+    if (
+        "highest temperature" not in title
+        and "highest-temperature" not in slug
+    ):
         continue
 
     event_id = str(event["id"])
