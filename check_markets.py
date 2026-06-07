@@ -1,38 +1,24 @@
 import requests
 import json
 
-URL = "https://gamma-api.polymarket.com/events/keyset"
-
-params = {
-    "limit": 100,
-    "tag_slug": "weather",
-    "closed": "false",
-    "order": "volume24hr",
-    "ascending": "false"
-}
-
-print("Fetching weather events...")
+url = "https://gamma-api.polymarket.com/events/keyset"
 
 response = requests.get(
-    URL,
-    params=params,
+    url,
+    params={
+        "limit": 100,
+        "tag_slug": "weather",
+        "closed": "false",
+        "order": "volume24hr",
+        "ascending": "false"
+    },
     timeout=30
 )
 
 response.raise_for_status()
 
-events = response.json()
+data = response.json()
 
-print(f"Weather Events Found: {len(events)}")
+print("TYPE:", type(data))
 print()
-
-for i, event in enumerate(events[:20], start=1):
-    print("=" * 80)
-    print(f"EVENT #{i}")
-    print("ID:", event.get("id"))
-    print("TITLE:", event.get("title"))
-    print("SLUG:", event.get("slug"))
-    print("CREATED:", event.get("createdAt"))
-    print("ACTIVE:", event.get("active"))
-    print("CLOSED:", event.get("closed"))
-    print()
+print(json.dumps(data, indent=2)[:5000])
