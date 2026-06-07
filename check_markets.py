@@ -1,15 +1,27 @@
 import requests
-import json
 
-slug = "highest-temperature-in-taipei-on-june-9-2026"
+url = "https://gamma-api.polymarket.com/events"
 
-url = f"https://gamma-api.polymarket.com/events/slug/{slug}"
+response = requests.get(
+    url,
+    params={
+        "limit": 100
+    },
+    timeout=30
+)
 
-response = requests.get(url, timeout=30)
+print("Status:", response.status_code)
 
-print("STATUS:", response.status_code)
+events = response.json()
 
-try:
-    print(json.dumps(response.json(), indent=2)[:5000])
-except Exception as e:
-    print(response.text[:2000])
+print("Events:", len(events))
+
+for event in events:
+    title = event.get("title", "")
+
+    if "temperature" in title.lower():
+        print("=" * 60)
+        print("ID:", event.get("id"))
+        print("TITLE:", title)
+        print("CREATED:", event.get("createdAt"))
+        print("SLUG:", event.get("slug"))
