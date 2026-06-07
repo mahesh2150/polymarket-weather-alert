@@ -1,16 +1,18 @@
 import requests
-import json
 
 url = "https://gamma-api.polymarket.com/markets"
 
 response = requests.get(url, timeout=30)
 
-print("Status:", response.status_code)
-
 data = response.json()
 
 print("Markets Found:", len(data))
+print()
 
-print("\nFIRST MARKET:\n")
+for market in data:
+    print("=" * 60)
+    print("ID:", market.get("id"))
+    print("QUESTION:", market.get("question"))
 
-print(json.dumps(data[0], indent=2))
+    if "tags" in market:
+        print("TAGS:", market.get("tags"))
