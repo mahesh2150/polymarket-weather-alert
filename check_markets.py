@@ -12,7 +12,7 @@ URL = "https://gamma-api.polymarket.com/events/keyset"
 response = requests.get(
     URL,
     params={
-    "limit": 100,
+    "limit": 300,
     "tag_slug": "weather",
     "closed": "false",
     "order": "createdAt",
