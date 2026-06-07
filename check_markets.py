@@ -12,12 +12,12 @@ URL = "https://gamma-api.polymarket.com/events/keyset"
 response = requests.get(
     URL,
     params={
-        "limit": 100,
-        "tag_slug": "weather",
-        "closed": "false",
-        "order": "volume24hr",
-        "ascending": "false"
-    },
+    "limit": 100,
+    "tag_slug": "weather",
+    "closed": "false",
+    "order": "createdAt",
+    "ascending": "false"
+},
     timeout=30
 )
 
@@ -38,6 +38,13 @@ new_ids = set(seen_ids)
 new_events = []
 
 for event in events:
+
+    title = event["title"].lower()
+
+    # Only temperature markets
+    if "highest temperature" not in title:
+        continue
+
     event_id = str(event["id"])
 
     if event_id not in seen_ids:
