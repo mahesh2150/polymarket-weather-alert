@@ -1,5 +1,7 @@
 import requests
 
+print("SCRIPT STARTED")
+
 url = "https://gamma-api.polymarket.com/markets"
 
 response = requests.get(
@@ -8,7 +10,13 @@ response = requests.get(
     timeout=30
 )
 
+print("STATUS:", response.status_code)
+
 data = response.json()
+
+print("MARKETS:", len(data))
+
+found = 0
 
 keywords = [
     "temperature",
@@ -16,9 +24,7 @@ keywords = [
     "rain",
     "snow",
     "nyc",
-    "chicago",
-    "seattle",
-    "high temperature"
+    "chicago"
 ]
 
 for market in data:
@@ -26,7 +32,8 @@ for market in data:
 
     for keyword in keywords:
         if keyword in question:
-            print("=" * 60)
-            print("ID:", market["id"])
-            print("QUESTION:", market["question"])
+            found += 1
+            print(market["question"])
             break
+
+print("FOUND:", found)
