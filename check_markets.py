@@ -1,26 +1,15 @@
 import requests
+import json
 
-url = "https://gamma-api.polymarket.com/markets"
+slug = "highest-temperature-in-taipei-on-june-9-2026"
 
-response = requests.get(
-    url,
-    params={"limit": 500},
-    timeout=30
-)
+url = f"https://gamma-api.polymarket.com/events/slug/{slug}"
 
-data = response.json()
+response = requests.get(url, timeout=30)
 
-found = 0
+print("STATUS:", response.status_code)
 
-for market in data:
-    slug = market.get("slug", "").lower()
-    question = market.get("question", "").lower()
-
-    if "temperature" in slug or "temperature" in question:
-        found += 1
-        print("=" * 60)
-        print("ID:", market.get("id"))
-        print("QUESTION:", market.get("question"))
-        print("SLUG:", market.get("slug"))
-
-print("\nFOUND:", found)
+try:
+    print(json.dumps(response.json(), indent=2)[:5000])
+except Exception as e:
+    print(response.text[:2000])
