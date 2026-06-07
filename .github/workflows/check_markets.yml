@@ -3,12 +3,18 @@ name: Check Markets
 on:
   workflow_dispatch:
 
+  schedule:
+    - cron: "*/5 * * * *"
+
+permissions:
+  contents: write
+
 jobs:
   check:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -19,5 +25,19 @@ jobs:
       - name: Install Requests
         run: pip install requests
 
-      - name: Run Script
+      - name: Run Bot
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
         run: python check_markets.py
+
+      - name: Commit Updated IDs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add seen_events.json
+
+          git diff --staged --quiet || git commit -m "Update seen weather events"
+
+          git push
