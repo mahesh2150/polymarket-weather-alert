@@ -1,27 +1,21 @@
 import requests
 
-url = "https://gamma-api.polymarket.com/events"
-
 response = requests.get(
-    url,
+    "https://gamma-api.polymarket.com/events",
     params={
-        "limit": 100
+        "limit": 100,
+        "order": "createdAt",
+        "ascending": "false"
     },
     timeout=30
 )
 
-print("Status:", response.status_code)
-
 events = response.json()
 
-print("Events:", len(events))
+print("EVENTS:", len(events))
 
-for event in events:
-    title = event.get("title", "")
-
-    if "temperature" in title.lower():
-        print("=" * 60)
-        print("ID:", event.get("id"))
-        print("TITLE:", title)
-        print("CREATED:", event.get("createdAt"))
-        print("SLUG:", event.get("slug"))
+for event in events[:20]:
+    print("=" * 60)
+    print(event.get("createdAt"))
+    print(event.get("title"))
+    print(event.get("slug"))
